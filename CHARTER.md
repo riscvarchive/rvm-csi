@@ -8,7 +8,7 @@ The group has governance for the RVM-CSI specification and compatibility test-su
 
 The RVM-CSI SIG covers the following activities:
 
- -Provides gap analysis, strategy development, requirements analysis, and outreach for RVM-CSI on behalf of the Software HC
+ - Provides gap analysis, strategy development, requirements analysis, and outreach for RVM-CSI on behalf of the Software HC
  - Develops the roadmap and proposes the creation of TGs for the development of the RVM-CSI core specification, extensions, and compatibility test-suites
  - Drives the outreach to external (Open-Source, Academic, and Commercial) projects and actively recruits partners to develop RVM-CSI
  - Works with membership to establish guidelines and documentation
