@@ -34,4 +34,4 @@ The following items are presently not planned to be delivered as part of this wo
  1. [FEATURE 2]
  1. [... AS NEEDED]
 
-To achieve its goals, the {{ New Group Name }} {{ New Group Type }}, will interact with the following groups: [GROUP NAME 1] [GROUP TYPE 1], [GROUP NAME 2] [GROUP TYPE 2], […] and [GROUP NAME N] [GROUP TYPE N]. 
+To achieve its goals, the {{ New Group Name }} {{ New Group Type }}, will interact with the following groups: [GROUP NAME 1] [GROUP TYPE 1], [GROUP NAME 2] [GROUP TYPE 2], [...] and [GROUP NAME N] [GROUP TYPE N]. 
