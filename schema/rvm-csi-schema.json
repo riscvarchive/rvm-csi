@@ -1,0 +1,116 @@
+{
+	"$schema": "./rvm-csi-schema.json",
+	"$id": "rvm-csi.schema.json",
+	"title": "rvm-csi",
+	"description": "The schema for rvm-csi language-independancy",
+	"type": "object",
+	"properties": {
+		"cpu": {
+			"type": "object",
+			"properties": {
+				"model": {
+					"description": "The model name for RISC-V Core information, such as RV64EMA", 
+					"type": "string"
+				},
+				"cache": {
+					"description": "CPU Cache information",
+					"type": "object",
+					"properties": {
+						"dcache": {
+							"description": "The indicator for dcache support or not",
+							"type": "boolean"
+						},
+						"dcachesize": {
+							"description": "The dcache size",
+							"type": "string"
+						},
+						"icache": {
+							"description": "The indicator for icache support or not",
+							"type": "boolean"
+						},
+						"icachesize": {
+							"description": "The icache size",
+							"type": "string"
+						}
+					}
+				}, 
+				"pmp": {
+					"description": "CPU pmp information",
+					"type": "object",
+					"properties": {
+						"regionnumber": {
+							"description": "The number of regions pmp supports",
+							"type": "integer",
+							"mininum": 8,
+							"maximum": 32
+						}
+					}
+				}
+			}
+		},
+		"soc": {
+			"description": "SoC peripherals information",
+			"type": "object",
+			"properties": {
+				"uart": {
+					"description": "Uart information",
+					"number": {
+						"type": "integer",
+						"mininum": 1,
+						"maximum": 8
+					},
+					"regaddr": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"irq": {
+						"type": "integer"
+					}
+				}, 
+				"aes": {
+					"description": "aes information",
+					"regaddr": {
+						"type": "string"
+					},
+					"irq": {
+						"type": "integer"
+					}, 
+					"key": {
+						"size": "integer",
+						"mininum": 16,
+						"maximum": 32
+					},
+					"mode": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"doc": {
+			"description": "rvm-csi interfadce document",
+			"type": "object",
+			"properties": {
+				"abstract": {
+					"type": "string"
+				},
+				"modular": {
+					"type": "object",
+					"properties": {
+						"uart": {
+							"type": "string"
+						},
+						"aes": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"required": [ "cpu", "soc", "doc"]
+}
