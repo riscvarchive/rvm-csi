@@ -11,8 +11,9 @@ def format_text_from_array(input_array):
 def format_adoc_type_declaration(declaration):     
     # values can be "struct", "enum", "int", "unsigned"
     c_type = declaration['type'] 
-
-    out_str = "=== " + c_type + " *" + declaration['name'] + "*\n"
+    
+    out_str = "[#type_" + declaration['name'] + "]\n"
+    out_str += "=== " + c_type + " *" + declaration['name'] + "*\n"
     out_str += declaration['description'] + "\n\n" 
             
     if c_type == "enum":
@@ -33,8 +34,14 @@ def format_adoc_type_declaration(declaration):
                              
     return out_str
 
-def format_adoc_function(function):
+def format_adoc_function(function, module_type_list):
     
+    def format_param_type(type,types_defined_by_module):
+        if type in types_defined_by_module:
+            return "<<type_" + type + ",`" + type + "`>> "
+        else:
+            return type
+        
     out_str = "=== " + function['name'] + "\n"
     out_str += function['description'] + "\n\n"
         
@@ -49,11 +56,12 @@ def format_adoc_function(function):
         for param in function['c-params']:
                         
             param_type = param['type']
-            delimiter = " "
+            param_name = param['name']
             if param_type[-1] == '*': # pointer
-                delimiter = ""
-                    
-            out_str += "`" + param_type + delimiter + param['name'] + "` - " + param['description'] + "\n\n"
+                param_type = param_type.rstrip('*')
+                param_name = "*" + param_name
+                                        
+            out_str += format_param_type(param_type, module_type_list) + " `" + param_name + "` - " + param['description'] + "\n\n"
             
             if 'notes' in param.keys():
                 out_str += format_text_from_array(param['notes'])
@@ -61,8 +69,6 @@ def format_adoc_function(function):
                 
     else:
         out_str += "Function takes no parameters\n\n"
-    
-
     
     return out_str   
 
@@ -92,18 +98,21 @@ def generate_c_module_adoc(module, out_dir):
     out_str += "== Types\n"
     
     # Add type declarations
+    types_provided_by_module = [] # used to create link between function params and types, if possible
     if 'c-type-declarations' in module.keys():
         for type_declaration in module['c-type-declarations']:
             out_str += format_adoc_type_declaration(type_declaration)
             out_str += "\n"
+            types_provided_by_module.append(type_declaration['name'])
+            
         out_str += "\n"
     
     out_str += "== Functions\n"
-    
+        
     # Add function declarations
     if 'functions' in module.keys():
         for function in module['functions']:
-            out_str += format_adoc_function(function)
+            out_str += format_adoc_function(function, types_provided_by_module)
             out_str += "\n"
         out_str += "\n"      
     

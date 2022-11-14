@@ -56,7 +56,18 @@ modules:
          - name: memory
            type: csi_memory_t *
          - name: status
-           type: csi_status_t *   
+           type: csi_status_t *
+    functions:
+        - name: csi_set_status
+          description: Set some arbitrary status
+          c-params:
+          - name: isr
+            description: Status to set
+            type: csi_status_t
+          c-return-type: 
+            description: Not applicable
+            type: void
+
   - name: Interrupt and Timer Support
     description: Interrupt and timer support operations
     c-specific: false
