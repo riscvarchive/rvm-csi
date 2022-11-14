@@ -100,11 +100,13 @@ def format_c_function(function):
         for param in function['c-params']:
             
             param_type = param['type']
-            delimiter = " "
-            if param_type[-1] == '*': # pointer
-                delimiter = ""
-                    
-            out_str += param_type + delimiter + param['name'] + ", "
+            param_name = param['name']
+            if param_type[-1] == '*':
+                # pointer types - present with spacing as "int *a" 
+                param_type = param_type.rstrip('* ')
+                param_name = "*" + param_name
+                                                                    
+            out_str += param_type + " " + param_name + ", "
         
         out_str = out_str.rstrip(", ") # Get rid of last comma/space
         

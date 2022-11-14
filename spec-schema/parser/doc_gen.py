@@ -58,7 +58,7 @@ def format_adoc_function(function, module_type_list):
             param_type = param['type']
             param_name = param['name']
             if param_type[-1] == '*': # pointer
-                param_type = param_type.rstrip('*')
+                param_type = param_type.rstrip('* ')
                 param_name = "*" + param_name
                                         
             out_str += format_param_type(param_type, module_type_list) + " `" + param_name + "` - " + param['description'] + "\n\n"
