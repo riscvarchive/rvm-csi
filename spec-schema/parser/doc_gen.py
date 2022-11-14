@@ -38,7 +38,7 @@ def format_adoc_function(function, module_type_list):
     
     def format_param_type(type,types_defined_by_module):
         if type in types_defined_by_module:
-            return "<<type_" + type + ",`" + type + "`>> "
+            return "<<type_" + type + ",`" + type + "`>>"
         else:
             return type
         
