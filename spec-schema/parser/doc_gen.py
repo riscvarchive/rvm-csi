@@ -58,8 +58,8 @@ def format_adoc_function(function, module_type_list):
         
     out_str += "==== Return\n"
     
-    if 'c-return-type' in function.keys():
-        out_str += "`" + function['c-return-type']['type'] + "` - " + function['c-return-type']['description'] + "\n\n"
+    if 'c-return-value' in function.keys():
+        out_str += "`" + function['c-return-value']['type'] + "` - " + function['c-return-value']['description'] + "\n\n"
     
     out_str += "==== Parameters\n"
     

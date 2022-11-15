@@ -113,8 +113,8 @@ def format_c_function(function):
     out_str += "*/\n"
     
     return_type = "void" 
-    if 'c-return-type' in function.keys():
-        return_type = function['c-return-type']['type']
+    if 'c-return-value' in function.keys():
+        return_type = function['c-return-value']['type']
     
     out_str += return_type + " " + function['name'] + "("
     if 'c-params' in function.keys():

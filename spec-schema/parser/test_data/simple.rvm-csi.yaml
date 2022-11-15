@@ -64,7 +64,7 @@ modules:
           - name: isr
             description: Status to set
             type: csi_status_t
-          c-return-type: 
+          c-return-value: 
             description: Not applicable
             type: void
 
@@ -94,7 +94,7 @@ modules:
             type: csi_signal_t
             notes:
             - example of function parameter notes
-        c-return-type: 
+        c-return-value: 
           description: Status of register isr
           type: csi_status_t
   - name: Platform Discovery
@@ -108,6 +108,6 @@ modules:
     functions:
       - name: csi_get_cpu_clk_freq
         description: Returns CPU clock frequency in Hz.
-        c-return-type: 
+        c-return-value: 
           description: clock frequency in Hz
           type: const unsigned

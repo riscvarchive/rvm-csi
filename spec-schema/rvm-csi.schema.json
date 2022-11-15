@@ -38,18 +38,18 @@
           }
         }
       },
-      "c-function-return-type": {
-        "description": "C function return type",
+      "c-function-return-value": {
+        "description": "Value returned by C function",
         "type": "object",
         "additionalProperties": false,
         "required": ["description", "type"],
         "properties": {
           "description": {
-            "description": "C-specific function return type description",
+            "description": "C-specific function return value description",
             "type": "string"
           },
           "type": {
-            "description": "C function return type",
+            "description": "Return type",
             "type": "string"
           }
         }
@@ -87,11 +87,11 @@
               "$ref": "#/definitions/c-function-param"
             }
           },
-          "c-return-type": {
+          "c-return-value": {
             "description": "C function return type",
             "type": "object",
             "items":  {
-              "$ref": "#/definitions/c-function-return-type"
+              "$ref": "#/definitions/c-function-return-value"
             }
           }
         }
