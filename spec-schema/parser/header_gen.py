@@ -1,12 +1,21 @@
 import textwrap, pathlib
 
 def format_c_comment_lines(input_string):
+    ''' Takes a string as input. 
+        Returns input string wrapped to 80 chars with each line pre-prepended 
+        with an asterix so they can be used in a C comment. 
+    '''
     out_str = ""
     for lines in textwrap.wrap(input_string,80):
         out_str += ("* " + lines).rstrip() + "\n "
     return out_str
 
 def format_c_comment_lines_from_array(input_array):
+    ''' Takes an array of strings to be used as comments.  
+        Returns a string with the array concatenated into comment line.
+        Return string does not have comment terminator (*/).
+    '''
+    
     out_str = ""
     for item in input_array:
         out_str += format_c_comment_lines(item)
@@ -14,6 +23,10 @@ def format_c_comment_lines_from_array(input_array):
     return out_str    
 
 def format_c_include_file(include_file):
+    ''' Takes an include file object.
+        Returns a string with the file built into a C include line
+    '''
+    
     out_str = ""
     if (include_file['system-header']):
         out_str += "#include <" + include_file['filename'] + ">\n"   
@@ -22,8 +35,12 @@ def format_c_include_file(include_file):
     return out_str    
 
 def format_c_type_prefix_list(prefix_list):
-    # values can be ["const", "static", "volatile", "inline"]
-    # order is important for C compilation
+    ''' Takes a list of C prefixes to be applied to a type definition.
+        Values can be ["const", "static", "volatile", "inline"].
+        Returns a string with these concatenated together in the correct order
+        for C compilation.
+    '''
+    
     out_str = ""
     if "static" in prefix_list:
         out_str += "static "
@@ -76,13 +93,17 @@ def format_c_type_declaration(declaration):
     else:
         raise('undefined C type definition')   # Should not be possible to reach here            
     
-    # TODO does it make sense to have prefixes with typedefs ??
-    #if 'type-prefixes' in declaration.keys():
-    #    out_str = format_c_type_prefix_list(declaration['type-prefixes']) + out_str
+    if 'type-prefixes' in declaration.keys():
+        out_str = format_c_type_prefix_list(declaration['type-prefixes']) + out_str
                      
     return out_str
 
 def format_c_function(function):
+    ''' Takes a function object.
+        Returns a string containing the function formatted as a C function
+        prototype.
+    '''
+    
     # Start the comment.
     out_str = "/*\n "
         
@@ -117,6 +138,11 @@ def format_c_function(function):
     return out_str     
 
 def generate_c(api_definition, out_dir):
+    ''' Top level function which iterates through each of the modules in the api definition 
+        to build C header content and write it an appropriate file.
+        Input parameters are the api_definition object and the output directory for the header files 
+    '''
+    
     for module in api_definition['modules']:
         
         out_file = pathlib.Path(out_dir, module['c-filename'])

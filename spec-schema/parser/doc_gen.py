@@ -1,6 +1,7 @@
 import pathlib
 
 def format_text_from_array(input_array):
+    ''' Concatenates an array of strings into a single return string.'''
     out_str = ""
     
     for item in input_array:
@@ -8,7 +9,11 @@ def format_text_from_array(input_array):
         out_str += "\n"
     return out_str
 
-def format_adoc_type_declaration(declaration):     
+def format_adoc_type_declaration(declaration):
+    ''' Builds adoc level 3 & 4 section for supplied type declaration.
+        Returns this as a string.
+    '''
+         
     # values can be "struct", "enum", "int", "unsigned"
     c_type = declaration['type'] 
     
@@ -35,10 +40,16 @@ def format_adoc_type_declaration(declaration):
     return out_str
 
 def format_adoc_function(function, module_type_list):
+    ''' Builds adoc level 3 & 4 section for supplied function declaration.
+        Second parameter is a list of types declared within this module which
+        is used to create cross-references.
+        Returns function adoc string.
+    '''
     
     def format_param_type(type,types_defined_by_module):
+        ''' If parameter type is defined within module then render this as a cross-reference'''
         if type in types_defined_by_module:
-            return "<<type_" + type + ",`" + type + "`>>"
+            return "<<type_" + type + ",`" + type + "`>>" # Adoc cross-reference to type
         else:
             return type
         
@@ -73,6 +84,10 @@ def format_adoc_function(function, module_type_list):
     return out_str   
 
 def generate_c_module_adoc(module, out_dir):
+    ''' Builds adoc file for a module.
+        Inputs are the module definition and the output directory for the
+        adoc file.
+    '''
         
     filename = module['c-filename'].lower().replace('.','_') + ".adoc"    
     out_file = pathlib.Path(out_dir, filename)
@@ -124,6 +139,12 @@ def generate_c_module_adoc(module, out_dir):
     return module['c-filename'],module['name'],filename
 
 def generate_c_adoc(api_definition, out_dir):
+    ''' Top level function which builds a top level index adoc file then 
+        iterates through modules defined in the api definition to build module
+        documentation.
+        Input parameters are the api_definition object and the output directory 
+        for the adoc files. 
+    '''
     
     # Top level file
     filename =  api_definition['c-documentation-title'].lower().replace(' ','_') + ".adoc"

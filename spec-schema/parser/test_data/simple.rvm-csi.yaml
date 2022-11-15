@@ -105,9 +105,6 @@ modules:
     - name: csi_timer_count_t
       type: unsigned
       description: An example of an unsigned type definition
-      type-prefixes:
-      - volatile
-      - static
     functions:
       - name: csi_get_cpu_clk_freq
         description: Returns CPU clock frequency in Hz.
