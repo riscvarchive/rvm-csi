@@ -83,14 +83,14 @@ def format_adoc_function(function, module_type_list):
     
     return out_str   
 
-def generate_c_module_adoc(module, out_dir):
+def generate_c_module_adoc(module, out_dir, module_sub_dir):
     ''' Builds adoc file for a module.
-        Inputs are the module definition and the output directory for the
+        Inputs are the module definition and the output directory & sub directory for the
         adoc file.
     '''
         
     filename = module['c-filename'].lower().replace('.','_') + ".adoc"    
-    out_file = pathlib.Path(out_dir, filename)
+    out_file = pathlib.Path(out_dir, module_sub_dir, filename)
     
     out_str = "[#title]\n"
     out_str += "= " + module['c-filename'] + " - " + module['name'] + "\n"
@@ -127,14 +127,25 @@ def generate_c_module_adoc(module, out_dir):
         for function in module['functions']:
             out_str += format_adoc_function(function, types_provided_by_module)
             out_str += "\n"
-        out_str += "\n"      
-    
+        out_str += "\n"
+        
+    # Add link back to top level          
+    out_str += "'''\n"
+    top_level_filename_with_path = pathlib.Path("..", top_level_filename)
+    out_str += "xref:" + str(top_level_filename_with_path) + "#title[Back to top level]\n"
+
     
     # Write to the output file
     out_file.parent.mkdir(exist_ok=True, parents=True)
     out_file.write_text(out_str)
     
     return module['c-filename'],module['name'],filename
+
+# Top level file is always "index.adoc"
+top_level_filename =  "index.adoc"
+
+# Module sub-directory definition
+module_sub_dir = "modules"
 
 def generate_c_adoc(api_definition, out_dir):
     ''' Top level function which builds a top level index adoc file then 
@@ -143,12 +154,11 @@ def generate_c_adoc(api_definition, out_dir):
         Input parameters are the api_definition object and the output directory 
         for the adoc files. 
     '''
-    
-    # Top level file
-    filename =  api_definition['c-documentation-title'].lower().replace(' ','_') + ".adoc"
-    
-    out_file = pathlib.Path(out_dir, filename)
-    out_str = "= " + api_definition['c-documentation-title'] + "\n"
+        
+    out_file = pathlib.Path(out_dir, top_level_filename)
+        
+    out_str = "[#title]\n"
+    out_str += "= " + api_definition['c-documentation-title'] + "\n"
     
     if 'notes' in api_definition.keys():
         out_str += format_text_from_array(api_definition['notes'])
@@ -163,10 +173,11 @@ def generate_c_adoc(api_definition, out_dir):
     for module in api_definition['modules']:
         # Generate docs for module - this will be a new file
         # Returns [c filename, module name, adoc filename]
-        module_links = generate_c_module_adoc(module, out_dir)
+        module_links = generate_c_module_adoc(module, out_dir, module_sub_dir)
     
         # Add link to a table of contents
-        out_str += "* xref:" + module_links[2] + "#title[" + module_links[0] + "] - " + module_links[1] + "\n"
+        module_file_wth_path = pathlib.Path(module_sub_dir, module_links[2])
+        out_str += "* xref:" + str(module_file_wth_path) + "#title[" + module_links[0] + "] - " + module_links[1] + "\n"
     
     # Write to the output file
     out_file.parent.mkdir(exist_ok=True, parents=True)
