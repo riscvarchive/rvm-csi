@@ -107,9 +107,7 @@ def generate_c_module_adoc(module, out_dir):
     if 'c-specific-notes' in module.keys():
         out_str += format_text_from_array(module['c-specific-notes'])
         out_str += "\n"
-        
-    out_str += "== Defines\n"
-        
+                
     out_str += "== Types\n"
     
     # Add type declarations
