@@ -39,8 +39,8 @@ The .adoc files can be transformed to HTML using [Asciidoctor](https://asciidoct
 
 Top level parser tests:
 
-`python3 parser_test.py`
+`python3 -m unittest -v parser_test.py`
 
 Header generation tests:
 
-`python3 header_gen_test.py`
+`python3 -m unittest -v header_gen_test.py`
