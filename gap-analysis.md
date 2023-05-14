@@ -161,6 +161,14 @@ Functionality within the driver-level APIs may require an interrupt and timer su
 
 All of the code underneath these APIs is considered to be platform-specific, and would typically be provided as a Board Support Package (BSP) by a platform vendor.  However in practice, much of the code, particularly at driver-level and high-level, can be formed from common code with a few build-time options to tailor its behaviour to the platform.  This makes implementation of a BSP for a new platform much easier.  The use of the low-level API to provide platform-specific information (such as addresses) to the driver-level code in a standard form helps to facilitate this.
 
+The following diagram illustrate how these APIs might fit within a user application which makes use of an RTOS:
+
+![](gap-analysis-illustrations/RVM-CSI_with_RTOS.png)
+
+The following diagram illustrates how a bare-metal application might make use of these APIs:
+
+![](gap-analysis-illustrations/RVM-CSI_Bare-Metal.png)
+
 Note that for some existing HALs, a single organization is responsible both for defining the API and for implementing the code under it.  As a result, the distinction between the API and its implementation for a particular platform has become indistinct.  In the case of RVM-CSI the specification must be very clear about who is responsible for implementing what; so that standard cross-platform components can be implemented separately from vendor-specific components.
 
 The APIs should be formulated in a way that allows for use in systems with a machine-mode / user-mode split, as well as in M-mode only systems.  They should also allow for a thread-safe (re-entrant) implementation such that separate instances of the RVM-CSI system can operate in parallel on different hardware threads within a single-elf multi-core or multi-thread application.
@@ -168,6 +176,7 @@ The APIs should be formulated in a way that allows for use in systems with a mac
 The APIs should take into account that the code will be built for a specific platform, so platform characteristics are known at build time: run-time discovery of fixed platform characteristics is unnecessary and potentially wasteful of resources.  However, compiler optimization can be used to eliminate any run-time code that always produces the same result for a given platform.
 
 Implementations of RVM-CSI may be supplied either in binary or source code form.  This has implications for the APIs and for the implementation.  For example in C, to support binary library distribution, pre-processor directives that are intended to change system behaviour at run-time must only be used in header files, not within the compiled C-code.
+
 
 ### DSP and Neural Network APIs
 
