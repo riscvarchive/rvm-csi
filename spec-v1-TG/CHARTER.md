@@ -18,8 +18,6 @@ As a minimum, the following areas should be covered by version 1 of the run-time
 - UART control
 - “Console” output for text, redirecting to UART / semihosting / circular buffer etc. according to build options
 
-The specification should also include:
-- Guidelines on the provision of platform-specific low-level startup code.
-- The format of board support packages which will provide HAL implementation code for a specific platform, along with meta-data encapsulating other information about that platform as might be required by toolkits and integrated development environments.
+Apart from the C API, this TG will also specify the format of a "board support pack" which is the vehicle through which platform vendors will supply code, data and meta-data implementing RVM-CSI for their platforms.  Such a pack may convey information about the platform to tools, IDEs etc., as well as delivering code into the user's build.  It may also deliver platform-specific start-up code.  Anything defined here must align with the work coming out of Unified Discovery TG.
 
 Other areas of functionality may also be covered, with the approval of the RVM-CSI SIG.
