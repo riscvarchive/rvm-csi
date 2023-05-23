@@ -7,7 +7,7 @@ This document presents the formal gap analysis for RVM-CSI (RISC-V Microcontroll
 The aims of this analysis are:
 - Examine what gaps there are in the RISC-V software ecosystem relating to the SIG charter aims.
 - Examine what RISC-V software solutions are existing in this space and how they might be aligned, improved or supplemented.
-- Examine if and how these gaps are filled within the (currently predominant) ARM-based ecosystem.
+- Examine if and how these gaps are filled within the (currently predominant) Arm-based ecosystem.
 - Survey the requirements of likely end users
 - Outline the strategy by which the aims of the SIG charter will be met.
 
@@ -31,15 +31,17 @@ This is copied below for convenience:
 
 ## Background
 
-RVM refers to a class of platforms and profiles which RISC-V International originally intended to define. A profile defines a specific base ISA, plus ISA extensions and any options applicable within those ISA extensions. A platform comprises a profile plus further specifications for non-ISA features (such as interrupt controllers etc.).
+RVM refers to a class of platforms and profiles which RISC-V International intends to define. A profile defines a specific base ISA, plus ISA extensions and any options applicable within those ISA extensions. A platform comprises a profile plus further specifications for non-ISA features (such as interrupt controllers etc.).
 
-The motivation behind defining these profiles and platforms is to constrain the features of a RISC-V platform in order to make it easier to write software that is portable between platforms. This is most important in the application processor space, where binary distributions need to be created that will work on platforms from multiple vendors. Hence most focus in this area has been on the RVA (application processor) platforms.
+One possible motivation behind defining these profiles and platforms is to constrain the features of a RISC-V platform in order to make it easier to write software that is portable between platforms. This is most important in the application processor space, where binary distributions need to be created that will work on platforms from multiple vendors. Hence most focus in this area has been on the RVA (application processor) platforms.
 
-In the embedded space, there is no longer an intention, at least in the near future at time of writing, to define the RVM platforms and profiles. Rather, since we assume that software will be built for a specific embedded platform, we can deal with the problem of software portability by creating a software layer that abstracts the features of the platform. Hence the motivation behind RVM-CSI.
+In the embedded space, the definition of profiles and platforms is not motivated by binary software portability. Rather, since we assume that software will be built for a specific embedded platform, we can deal with the problem of software portability by creating a software layer that abstracts the features of the platform. Hence the motivation behind RVM-CSI.
 
 In constructing systems for RVM platforms, we assume the following:
 - The software is built for a specific platform (i.e., platform characteristics are known at build time).
-- The software is not using a rich OS such as linux (which would have its own standardized methods for control of the platform and discovery of its characteristics).
+- The software is not using a rich OS such as Linux (which would have its own standardized methods for control of the platform and discovery of its characteristics).
+
+It is important to note that a platform does not need to conform to a defined RVM platform in order to support RVM-CSI.
 
 ## Assumed Features of Underlying Hardware
 
@@ -57,7 +59,7 @@ RVM-CSI does not require to support systems with virtual addressing.
 
 Software writers who wish to use the RVM-CSI Application Programming Interface (API) may fall broadly into the following groups:
 1. People creating "bare-metal" systems (that they might like to be portable between RISC-V platforms).
-2. People porting "bare-metal" systems from ARM or other architectures to RISC-V.
+2. People porting "bare-metal" systems from Arm or other architectures to RISC-V.
 3. People writing applications running on an Operating System (OS).
 4. People porting an (OS) to work on a RISC-V platform.
 5. People writing device drivers for an OS.
@@ -65,6 +67,8 @@ Software writers who wish to use the RVM-CSI Application Programming Interface (
 Regarding the aim of portability, as outlined in the charter, it should be noted that one of the features of an OS is to provide a portable, platform-agnostic programming layer.  Furthermore, many existing OS's aimed at microcontrollers have a significant existing user base.  If "bare-metal" systems creators are interested in portability, then they have the option of using an OS to achieve this.  Therefore, users in groups 4 and 5 should be considered particularly important.
 
 In addition to the issue of code portability, however, users simply require a convenient way to interface to the hardware of a given platform: for example they would like convenience functions for manipulating aspects of the core, and they need to use names rather than numeric values to reference addresses, CSR indices, bit-fields within registers, etc.  This more modest aim, rather than the larger aim of portability, is an important focus of many existing Hardware Abstraction Layers (HALs).
+
+As cheap hardware becomes more powerful, and as the focus on security concerns increases, the prevalence of operating systems in the embedded microcontroller space is increasing, and one might question the importance of "bare-metal" systems in the real world.  However, the importance of easily creating a bare-metal system, either as a learning exercise, or as a step towards creation of a larger system, should not be under-stated.  A key factor in promoting the switch to RISC-V is helping new developers to create tutorial applications.
 
 Some simple Real Time Operating Systems (notably FreeRTOS) do not provide an interface to many hardware components; this is left up to the user.  People writing applications aimed at this type of OS may therefore benefit from similar functionality to those working on bare-metal systems.
 
@@ -90,21 +94,21 @@ To take another example, Zephyr defines [a standardized driver interface][1] whi
 
 ### [CMSIS][3]
 
-This is a software layer (+ other components) maintained by ARM to support their cores.  It is widely adopted.  It is implicitly assumed that RVM-CSI is RISC-V's answer to CMSIS.
+This is a software layer (+ other components) maintained by Arm to support their cores.  It is widely adopted.  It is implicitly assumed that RVM-CSI is RISC-V's answer to CMSIS.
 
-If we need to encourage embedded developers to switch from ARM to RISC-V then we should pay attention to this API as it will be easier for those people to switch to using an API that looks similar.  However, it is not universally liked, so we should assess the scope for doing something better.  In addition it is very specific to ARM cores, so cannot be adopted wholesale.
+If we need to encourage embedded developers to switch from Arm to RISC-V then we should pay attention to this API as it will be easier for those people to switch to using an API that looks similar.  However, it is not universally liked, so we should assess the scope for doing something better.  In addition it is very specific to Arm cores, so cannot be adopted wholesale.
 
 The run-time API aspect of CMSIS is modular in 5 parts:
-- **Core(A)** or **Core(M)** present low-level interfaces to specific hardware components.  There is no portability aspect here, indeed there are 2 separate versions of the API for different classes of ARM processor (A and M class).  However, this is an essential mechanism by which ARM communicates to software developers how to control their cores, and an undoubtedly useful abstraction.  It indirectly helps portability, by assisting in the writing of drivers etc. to contribute to higher-level portable software layers, even though the APIs themselves are not portable.
+- **Core(A)** or **Core(M)** present low-level interfaces to specific hardware components.  There is no portability aspect here, indeed there are 2 separate versions of the API for different classes of Arm processor (A and M class).  However, this is an essential mechanism by which Arm communicates to software developers how to control their cores, and an undoubtedly useful abstraction.  It indirectly helps portability, by assisting in the writing of drivers etc. to contribute to higher-level portable software layers, even though the APIs themselves are not portable.
 - **RTOS** (v1 and v2) attempts to abstract RTOS functionality.  This seems out of scope for RVM-CSI.
 - **Driver** presents a platform-agnostic driver API to allow standardized control of peripherals.  This potentially aligns with RVM-CSI's portability goal. Drivers implemented to this API may themselves use the lower-level Core API.
 - **DSP** and **NN** present high-level APIs for DSP / Neural Network functionality.  Whether this is in-scope for RVM-CSI may depend on how much hardware-specific content needs to be implemented underneath these APIs.  Being relatively high-level, it may be hard to get the APIs right, to serve the requirements of a large user base; so we should check the level of adoption if possible.  If these interfaces are widely used, then there would be a case for including this functionality within RVM-CSI.  However, as a general principle, it is not within the RVM-CSI remit to supply general-purpose software libraries.
 
 There are also a number of components of CMSIS beyond run-time software support:
 - **DAP** is firmware for debuggers conforming to the CoreSight debugging framework.  Not in scope for RVM-CSI.
-- **SVD** specifies a file format describing memory-mapped peripheral registers (typically used to communicate this information to an IDE or other tool).  This is useful, and RISC-V should consider either adopting the same format (for compatibility with existing ARM systems) or doing something equivalent.  The relationship of this to Unified Discovery in RISC-V should be considered.
+- **SVD** specifies a file format describing memory-mapped peripheral registers (typically used to communicate this information to an IDE or other tool).  This is useful, and RISC-V should consider either adopting the same format (for compatibility with existing Arm systems) or doing something equivalent.  The relationship of this to Unified Discovery in RISC-V should be considered.
 - **Pack** and  **Toolbox** (formerly **Build**) are about software package management.  It is potentially within scope for RVM-CSI to specify the way in which RVM-CSI implementations should be packaged and delivered to end users, such that knowledge of a new platform, and code to support it, can be easily installed into a toolkit, for example.
-- **Zone** is very specific software related to ARM's security features so is not in scope for RVM-CSI.
+- **Zone** is very specific software related to Arm's security features so is not in scope for RVM-CSI.
 
 ### [T-Head CSI][2]
 
@@ -124,7 +128,7 @@ If specifying platform-agnostic driver APIs we should consider this layer within
 
 ### [STM32Cube][6]
 
-This "ecosystem" attempts to provide an "all-in-one" development solution for ST's ARM-based microcontrollers.  It includes many components outside of RVM-CSI's remit including build systems, monitoring systems, an IDE, and a range of software components.  Amongst this are two software layers which align with the RVM-CSI aims: one called the HAL and another called LL (low-level).  The HAL generally aims at software portability, and an API with generic functionality (more customized functionality targeting particular cores is also included in a separate extension module).  The LL code is close to specific hardware, and its API aligns with the functionality of the hardware itself.  One other important distinction is that the HAL may use static data and independently-running software processes, whereas the LL does not: the LL relies on the hardware itself for all storage of state.
+This "ecosystem" attempts to provide an "all-in-one" development solution for ST's Arm-based microcontrollers.  It includes many components outside of RVM-CSI's remit including build systems, monitoring systems, an IDE, and a range of software components.  Amongst this are two software layers which align with the RVM-CSI aims: one called the HAL and another called LL (low-level).  The HAL generally aims at software portability, and an API with generic functionality (more customized functionality targeting particular cores is also included in a separate extension module).  The LL code is close to specific hardware, and its API aligns with the functionality of the hardware itself.  One other important distinction is that the HAL may use static data and independently-running software processes, whereas the LL does not: the LL relies on the hardware itself for all storage of state.
 
 
 
@@ -132,7 +136,7 @@ This "ecosystem" attempts to provide an "all-in-one" development solution for ST
 
 Cryptography is an area not generally covered by the HALs mentioned above, but it is an area that is commonly supported by hardware acceleration, so should fall within the RVM-CSI remit.
 
-The required cryptography operations are relatively easily defined in a hardware-independent way.  Furthermore, there is an existing API in this space that is fully platform independent and widely adopted: ARM's [PSA API][7].  After consulting widely among cryptography experts, there is a strong majority view that we should align with this API in RISC-V.
+The required cryptography operations are relatively easily defined in a hardware-independent way.  Furthermore, there is an existing API in this space that is fully platform independent and widely adopted: Arm's [PSA API][7].  After consulting widely among cryptography experts, there is a strong majority view that we should align with this API in RISC-V.
 
 
 ## Weaknesses of Existing Software in this Space
@@ -143,10 +147,6 @@ There are some other weaknesses that we should consider:
 - There is no support for multiple privilege levels: it seems that M-mode-only systems have been largely assumed.
 - In some cases the functionality may not be fully thread-safe: implementation may rely on static data within the HAL implementation.
 - People constructing bare-metal systems might like APIs which are at a higher level of abstraction and thus easier to use.  This comment applies also to people developing on a very "thin" RTOS like FreeRTOS.  (FreeRTOS doesn't deal with interfacing to peripherals).
-
-## Bare-metal Systems
-
-As cheap hardware becomes more powerful, and as the focus on security concerns increases, the prevalence of operating systems in the embedded microcontroller space is increasing, and one might question the importance of "bare-metal" systems in the real world.  However, the importance of easily creating a bare-metal system, either as a learning exercise, or as a step towards creation of a larger system, should not be under-stated.  A key factor in promoting the switch to RISC-V is helping new developers to create tutorial applications.
 
 ## Proposed Strategy
 
@@ -184,7 +184,7 @@ These could be considered as an extension to the set of high-level HAL APIs.  To
 
 ### Cryptography API
 
-RVM-CSI should specify alignment to the [ARM PSA API][7] on cryptography.
+RVM-CSI should specify alignment to the [Arm PSA API][7] on cryptography.
 
 ### Other Aspects of the Specification
 
